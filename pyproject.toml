@@ -29,3 +29,8 @@ build-backend = "pdm.backend"
 
 [tool.pdm.version]
 source = "scm"
+
+[tool.pdm.build]
+source-includes = [
+    "shader_i18n",
+]
