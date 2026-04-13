@@ -1,0 +1,20 @@
+[project]
+name = "shader-i18n"
+dynamic = ["version"]
+description = "Add your description here"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=2.31.0",
+    "typer>=0.24.1",
+]
+
+[project.scripts]
+shader-i18n = "shader_i18n.cli.main:app"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm.version]
+source = "scm"
