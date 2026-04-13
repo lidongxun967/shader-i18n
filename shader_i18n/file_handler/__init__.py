@@ -12,19 +12,19 @@ class ShaderPackHandler:
     文件处理流程
     """
 
-    def __init__(self, file_path: str, place: bool = True,output_file_path: str = None):
+    def __init__(self, file_path: str, in_place: bool = True,output_file_path: str = None):
         """
         初始化文件处理流程
         
         params:
             file_path: 原 shader pack 文件路径
-            place: 是否原地处理
-            output_file_path: 输出文件路径，只在 place 为 False 时有效
+            in_place: 是否原地处理
+            output_file_path: 输出文件路径，只在 in_place 为 False 时有效
         return:
             None
         """
         self.file_path = file_path
-        self.place = place
+        self.in_place = in_place
         self.output_file_path = output_file_path
 
         if not zipfile.is_zipfile(self.file_path):
@@ -49,7 +49,7 @@ class ShaderPackHandler:
         """
         进入上下文管理器
         """
-        if not self.place:
+        if not self.in_place:
             # 复制zip文件到临时目录，不做解压
             self.temp_dir = tempfile.TemporaryDirectory()
             shutil.copy(self.file_path, os.path.join(self.temp_dir.name, os.path.basename(self.file_path)))
@@ -83,17 +83,20 @@ class ShaderPackHandler:
             str: 语言文件内容
         """
         # 语言文件在zip文件的 shaders/lang目录下如 shaders/lang/en_us.lang 返回 en_us.lang
-        with zipfile.ZipFile(self.file_path, 'r') as zip_ref:
-            lang_file = zip_ref.open(f'shaders/lang/{lang}.lang', 'r')
-            lang_content = lang_file.read().decode('utf-8')
-            lang_file.close()
-        return lang_content
+        try:
+            with zipfile.ZipFile(self.file_path, 'r') as zip_ref:
+                lang_file = zip_ref.open(f'shaders/lang/{lang}.lang', 'r')
+                lang_content = lang_file.read().decode('utf-8')
+                lang_file.close()
+            return lang_content
+        except KeyError:
+            raise ShaderPackFileError(f'语言文件 shaders/lang/{lang}.lang 不存在')
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """
         退出上下文管理器
         """
-        if not self.place:
+        if not self.in_place:
             # 复制临时目录的zip文件到输出文件路径
             shutil.copy(os.path.join(self.temp_dir.name, os.path.basename(self.file_path)), self.output_file_path)
             # 关闭临时目录
