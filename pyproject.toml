@@ -11,8 +11,17 @@ dependencies = [
     "typer>=0.24.1",
 ]
 
+authors = [
+    { name = "lidongxun967", email = "Debug967@outlook.com" },
+]
+
 [project.scripts]
 shader-i18n = "shader_i18n.cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/lidongxun967/shader-i18n"
+Repository = "https://github.com/lidongxun967/shader-i18n"
+Issues = "https://github.com/lidongxun967/shader-i18n/issues"
 
 [build-system]
 requires = ["pdm-backend"]
