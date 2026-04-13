@@ -4,6 +4,8 @@ dynamic = ["version"]
 description = "Add your description here"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = [
     "openai>=2.31.0",
     "typer>=0.24.1",
