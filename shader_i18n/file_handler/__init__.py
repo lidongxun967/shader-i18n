@@ -85,9 +85,8 @@ class ShaderPackHandler:
         # 语言文件在zip文件的 shaders/lang目录下如 shaders/lang/en_us.lang 返回 en_us.lang
         try:
             with zipfile.ZipFile(self.file_path, 'r') as zip_ref:
-                lang_file = zip_ref.open(f'shaders/lang/{lang}.lang', 'r')
-                lang_content = lang_file.read().decode('utf-8')
-                lang_file.close()
+                with zip_ref.open(f'shaders/lang/{lang}.lang', 'r') as lang_file:
+                    lang_content = lang_file.read().decode('utf-8')
             return lang_content
         except KeyError:
             raise ShaderPackFileError(f'语言文件 shaders/lang/{lang}.lang 不存在')
